@@ -1,9 +1,19 @@
-var app = require('express')();
+var express = require('express');
+var load = require('express-load');
 
-// configura motor de visualização
-app.set('view engine', 'ejs');
+module.exports = () => {
 
-// configura caminho das views
-app.set('views', './app/views');
+  var app = express();
 
-module.exports = () => app;
+  // configura motor de visualização
+  app.set('view engine', 'ejs');
+
+  // configura caminho das views
+  app.set('views', './app/views');
+
+  // carrega todas as rotas e todas funções do banco
+  load('routes', {cwd: 'app'}).then('data').into(app);
+
+  return app;
+
+}
