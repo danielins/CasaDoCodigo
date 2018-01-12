@@ -1,7 +1,7 @@
 module.exports = (app) => {
 
   // configura rota para página de produtos
-  app.get('/produtos', (req, res) => {
+  app.get('/produtos', (req, res, next) => {
 
     // cria conexão com o banco usando módulo
     const connection = app.data.dbConnection();
@@ -10,6 +10,12 @@ module.exports = (app) => {
     const produtos = new app.data.produtosBanco(connection);
 
     produtos.lista((err, results) => {
+
+      // verificação de erros
+      if ( err ){
+        // se houver erros, executa a próxima função no fluxo atual
+        return next(err);
+      }
 
       // Responde um formato diferente de acordo com o tipo de conteúdo solicitado
       res.format({
