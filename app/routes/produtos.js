@@ -19,4 +19,26 @@ module.exports = (app) => {
 
   });
 
+
+  app.get('/produtos/novo', (req, res) => {
+
+    res.render('produtos/form');
+
+  });
+
+
+  app.post('/produtos/', (req, res) => {
+
+    const connection = app.data.dbConnection();
+
+    const produtos = new app.data.produtosBanco(connection);
+
+    const novoProduto = req.body;
+
+    produtos.salva(novoProduto, (err, results) => {
+      res.redirect('/produtos');
+    });
+
+  });
+
 }
