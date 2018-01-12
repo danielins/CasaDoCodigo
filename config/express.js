@@ -13,7 +13,9 @@ module.exports = () => {
   app.set('views', './app/views');
 
   // middleware de codificação do corpo de requisições
+  // podem receber urlencoded (a partir de formulários) e json
   app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.json())
 
   // carrega todas as rotas e todas funções do banco
   load('routes', {cwd: 'app'}).then('data').into(app);

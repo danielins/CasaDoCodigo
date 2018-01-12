@@ -14,6 +14,6 @@ const config = {
 
 http.get(config, (res) => {
   res.on('data', (body) => {
-    console.log('Corpo: ' + body);
+    console.log(body.toString());
   });
 });
