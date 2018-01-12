@@ -10,8 +10,18 @@ module.exports = (app) => {
     const produtos = new app.data.produtosBanco(connection);
 
     produtos.lista((err, results) => {
-      // variavel lista usará os valores retornados
-      res.render('produtos/lista', {lista: results});
+
+      // Responde um formato diferente de acordo com o tipo de conteúdo solicitado
+      res.format({
+        // se o formato requisitado for HTML
+        html: function(){
+          res.render('produtos/lista', {lista: results});
+        },
+        json: function(){
+          res.json(results);
+        }
+      });
+
     });
 
     // fecha conexão
