@@ -7,18 +7,25 @@
   <title>Novo Produto</title>
 </head>
 <body>
+  <% if ( erros ) { %>
+    <ul class="erros">
+    <% for ( var i = 0; i < erros.length; i++ ) { %>
+      <li><%= erros[i].msg %></li>
+    <% } %>
+    </ul>
+  <% } %>
   <form action="/produtos/" method="post">
 
     <div>
       <label for="titulo">Título</label>
-      <input type="text" name="titulo" id="titulo">
+      <input type="text" name="titulo" id="titulo" value="<%= produto.titulo %>">
     </div>
 
     <div><label for="descricao">Descrição</label>
-    <textarea name="descricao" id="descricao"></textarea></div>
+    <textarea name="descricao" id="descricao"><%= produto.descricao %></textarea></div>
 
     <div><label for="preco">Preço</label>
-    <input type="text" name="preco" id="preco"></div>
+    <input type="text" name="preco" id="preco" value="<%= produto.preco %>"></div>
 
     <input type="submit" value="Enviar">
 

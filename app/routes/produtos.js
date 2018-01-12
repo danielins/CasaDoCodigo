@@ -1,9 +1,9 @@
 module.exports = (app) => {
 
-  // configura rota para p�gina de produtos
+  // configura rota para página de produtos
   app.get('/produtos', (req, res) => {
 
-    // cria conex�o com o banco usando m�dulo
+    // cria conexão com o banco usando módulo
     const connection = app.data.dbConnection();
 
     // objeto da classe de consulta aos produtos
@@ -11,7 +11,7 @@ module.exports = (app) => {
 
     produtos.lista((err, results) => {
 
-      // Responde um formato diferente de acordo com o tipo de conte�do solicitado
+      // Responde um formato diferente de acordo com o tipo de conteúdo solicitado
       res.format({
         // se o formato requisitado for HTML
         html: function(){
@@ -24,28 +24,50 @@ module.exports = (app) => {
 
     });
 
-    // fecha conex�o
+    // fecha conexão
     connection.end();
 
   });
 
 
+  // configura rota para página de novo produto
   app.get('/produtos/novo', (req, res) => {
-
-    res.render('produtos/form');
-
+    res.render('produtos/form', {erros: {}, produto: {}});
   });
 
 
+  // configura rota para página que recebe cadastro de produtos
   app.post('/produtos/', (req, res) => {
 
     const connection = app.data.dbConnection();
-
     const produtos = new app.data.produtosBanco(connection);
 
-    const novoProduto = req.body;
+    // objeto do novo produto a ser cadastrado
+    const produto = req.body;
 
-    produtos.salva(novoProduto, (err, results) => {
+    // Validação
+    req.assert('titulo', 'Título é obrigatório').notEmpty();
+    req.assert('preco', 'Preço em inválido').isFloat();
+
+    let validacao = req.validationErrors();
+
+    // se encontrar erros, exibe-os de acordo com o tipo de resposta esperado
+    // seta o status da requisição para 400 Bad Request
+    if ( validacao ){
+      res.format({
+        html: function(){
+          res.status(400).render('produtos/form', {erros: validacao, produto});
+        },
+        json: function(){
+          res.status(400).json(validacao);
+        }
+      })
+
+      return false;
+    }
+
+    // salva o produto e redireciona a página
+    produtos.salva(produto, (err, results) => {
       res.redirect('/produtos');
     });
 
