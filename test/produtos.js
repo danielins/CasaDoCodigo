@@ -1,5 +1,6 @@
 // Teste das rotas de produtos
-// Usar no prompt [raíz do projeto]: node_modules/mocha/bin/mocha
+// !IMPORTANTE! Usar variável de ambiente de teste
+// Usar no prompt [raíz do projeto]: NODE_ENV=test node_modules/mocha/bin/mocha
 
 const express = require('../config/express')();
 const request = require('supertest')(express);
