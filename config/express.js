@@ -7,21 +7,24 @@ module.exports = () => {
 
   var app = express();
 
-  // configura motor de visualização
+  // para carregamento de recursos estÃ¡ticos (CSS, JS, etc)
+  app.use(express.static('./app/public'));
+
+  // configura motor de visualizaï¿½ï¿½o
   app.set('view engine', 'ejs');
 
   // configura caminho das views
   app.set('views', './app/views');
 
-  // middleware de codificação do corpo de requisições
-  // podem receber urlencoded (a partir de formulários) e json
+  // middleware de codificaï¿½ï¿½o do corpo de requisiï¿½ï¿½es
+  // podem receber urlencoded (a partir de formulï¿½rios) e json
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
 
-  // middleware de validação
+  // middleware de validaï¿½ï¿½o
   app.use(expressValidator());
 
-  // carrega todas as rotas e todas funções do banco
+  // carrega todas as rotas e todas funï¿½ï¿½es do banco
   load('routes', {cwd: 'app'}).then('data').into(app);
 
   return app;
